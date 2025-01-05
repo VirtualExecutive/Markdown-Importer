@@ -22,3 +22,4 @@ wheels/
 /$HOME
 setup.py
 pyproject.toml
+.pypirc
