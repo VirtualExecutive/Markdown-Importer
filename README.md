@@ -2,6 +2,12 @@
 
 Bu araç, markdown dosyalarınızı modüler bir şekilde yönetmenizi sağlar. Markdown dosyalarınızı parçalara ayırıp, ana dosyanızda import edebilirsiniz.
 
+## 📥 Kurulum
+
+```bash
+pip install markdown-importer
+```
+
 ## 🚀 Özellikler
 
 - Markdown dosyalarını modüler hale getirme
@@ -12,37 +18,35 @@ Bu araç, markdown dosyalarınızı modüler bir şekilde yönetmenizi sağlar. 
 
 ## 🛠️ Kullanım
 
-1. Import etmek istediğiniz dosyayı belirtin:
+### 1. Markdown Dosyasını Hazırlama
+Kaynak markdown dosyanızda import etmek istediğiniz dosyaları belirtin:
 ```markdown
 <!-- @import "docs/api/auth/readme.md" -->
 ```
 
-2. Scripti çalıştırın:
+### 2. Çalıştırma
+
 ```bash
-python _markdown_sync.py
+# Varsayılan ayarlarla
+markdown-importer
+
+# Özel parametrelerle
+markdown-importer -e README.editor.md -g README.github.md -l tr
 ```
 
-3. Script otomatik olarak:
-   - İmport edilen dosyaları bulur
-   - İçerikleri ana dosyaya ekler
-   - Eksik dosyaları bildirir
-   - Sonuç dosyasını oluşturur
+### 3. Parametreler
 
-## ⚙️ Yapılandırma
-
-```python
-markdown_sync = MarkdownSync(
-    editor_file="README.editor.md",    # Kaynak dosya
-    github_file="README.github.md",    # Hedef dosya
-    base_dir=".",                      # Temel dizin
-    language=Language.TURKISH          # Dil seçeneği
-)
-```
+| Parametre | Kısa | Uzun | Varsayılan | Açıklama |
+|-----------|------|------|------------|-----------|
+| Kaynak Dosya | -e | --editor-file | README.editor.md | İmport direktiflerini içeren kaynak dosya |
+| Hedef Dosya | -g | --github-file | README.github.md | Oluşturulacak sonuç dosyası |
+| Temel Dizin | -b | --base-dir | . | İmport edilecek dosyaların aranacağı dizin |
+| Dil | -l | --language | tr | Kullanılacak dil (tr: Türkçe, en: İngilizce) |
 
 ## 🌍 Dil Desteği
 
-- 🇹🇷 Türkçe (`Language.TURKISH`)
-- 🇬🇧 İngilizce (`Language.ENGLISH`)
+- 🇹🇷 Türkçe (`-l tr`)
+- 🇬🇧 İngilizce (`-l en`)
 
 ## ⚠️ Hata Yönetimi
 
@@ -56,6 +60,12 @@ markdown_sync = MarkdownSync(
 
 This tool allows you to manage your markdown files in a modular way. You can split your markdown files into pieces and import them into your main file.
 
+## 📥 Installation
+
+```bash
+pip install markdown-importer
+```
+
 ## 🚀 Features
 
 - Modular markdown file management
@@ -66,37 +76,35 @@ This tool allows you to manage your markdown files in a modular way. You can spl
 
 ## 🛠️ Usage
 
-1. Specify the file you want to import:
+### 1. Prepare Markdown File
+Specify the files you want to import in your source markdown file:
 ```markdown
 <!-- @import "docs/api/auth/readme.md" -->
 ```
 
-2. Run the script:
+### 2. Running
+
 ```bash
-python _markdown_sync.py
+# With default settings
+markdown-importer
+
+# With custom parameters
+markdown-importer -e README.editor.md -g README.github.md -l en
 ```
 
-3. The script automatically:
-   - Finds imported files
-   - Adds contents to main file
-   - Reports missing files
-   - Creates result file
+### 3. Parameters
 
-## ⚙️ Configuration
-
-```python
-markdown_sync = MarkdownSync(
-    editor_file="README.editor.md",    # Source file
-    github_file="README.github.md",    # Target file
-    base_dir=".",                      # Base directory
-    language=Language.ENGLISH          # Language option
-)
-```
+| Parameter | Short | Long | Default | Description |
+|-----------|-------|------|---------|-------------|
+| Source File | -e | --editor-file | README.editor.md | Source file containing import directives |
+| Target File | -g | --github-file | README.github.md | Result file to be created |
+| Base Directory | -b | --base-dir | . | Directory to search for imported files |
+| Language | -l | --language | tr | Language to use (tr: Turkish, en: English) |
 
 ## 🌍 Language Support
 
-- 🇹🇷 Turkish (`Language.TURKISH`)
-- 🇬🇧 English (`Language.ENGLISH`)
+- 🇹🇷 Turkish (`-l tr`)
+- 🇬🇧 English (`-l en`)
 
 ## ⚠️ Error Handling
 

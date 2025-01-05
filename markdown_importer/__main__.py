@@ -1,5 +1,7 @@
 import re
 import os
+import sys
+import argparse
 from typing import Tuple, List, Optional, Dict
 from enum import Enum
 
@@ -230,22 +232,15 @@ class MarkdownSync:
             
             content = self.readSourceFile()
             
-            # 2. Import direktiflerini işle
-            all_missing_files = [] # Bulunamayan dosyaların listesi
-            has_more_imports = True # Eklenecek dosyalar var mı kontrolü
+            all_missing_files = []
+            has_more_imports = True
             
-            # 2.1. Import edilecek dosyaları bulup içeriği yerleştir
-            while has_more_imports: 
-                # 2.2. Bulunamayan dosyaları işaretle
+            while has_more_imports:
                 content, missing_files = self.processImports(content, base_dir)
                 all_missing_files.extend(missing_files)
-                # 2.3. Eklenecek dosyalar var mı kontrol et
                 has_more_imports = self.hasImports(content)
             
-            # 3. Sonuç dosyasını oluştur
             self.writeTargetFile(content)
-            
-            # 4. Sonuçları raporla
             self.printResults(all_missing_files)
             
             return True
@@ -254,19 +249,75 @@ class MarkdownSync:
             print(self.lang_manager.getMessage("general_error", error=str(e)))
             return False
 
-if __name__ == "__main__":
-    editor_file = "README.editor.md"
-    github_file = "README.github.md"
-    base_dir = "."
-    language = Language.ENGLISH  # veya Language.TURKISH
+def main():
+    """
+    Ana çalıştırma fonksiyonu
+    """
+    # CMD'den çalıştırılıp çalıştırılmadığını kontrol et
+    is_cmd = len(sys.argv) > 1
     
-    markdown_sync = MarkdownSync(
-        editor_file=editor_file,
-        github_file=github_file,
-        base_dir=base_dir,
-        language=language
-    )
+    if is_cmd:
+        # CMD'den çalıştırılmışsa argümanları işle
+        parser = argparse.ArgumentParser(
+            description="Markdown dosyalarını modüler bir şekilde yönetmenizi sağlayan araç",
+            formatter_class=argparse.RawTextHelpFormatter
+        )
+        
+        parser.add_argument(
+            "-e", "--editor-file",
+            default="README.editor.md",
+            help="Kaynak markdown dosyası (varsayılan: README.editor.md)"
+        )
+        
+        parser.add_argument(
+            "-g", "--github-file",
+            default="README.github.md",
+            help="Hedef markdown dosyası (varsayılan: README.github.md)"
+        )
+        
+        parser.add_argument(
+            "-b", "--base-dir",
+            default=".",
+            help="Temel dizin yolu (varsayılan: .)"
+        )
+        
+        parser.add_argument(
+            "-l", "--language",
+            choices=["tr", "en"],
+            default="tr",
+            help="Kullanılacak dil (tr: Türkçe, en: İngilizce) (varsayılan: tr)"
+        )
+        
+        args = parser.parse_args()
+        
+        # Dil seçeneğini belirle
+        language = Language.TURKISH if args.language == "tr" else Language.ENGLISH
+        
+        # MarkdownSync nesnesini oluştur
+        markdown_sync = MarkdownSync(
+            editor_file=args.editor_file,
+            github_file=args.github_file,
+            base_dir=args.base_dir,
+            language=language
+        )
+    else:
+        # Doğrudan çalıştırılmışsa varsayılan değerleri kullan
+        editor_file = "README.editor.md"
+        github_file = "README.github.md"
+        base_dir = "."
+        language = Language.TURKISH
+        
+        markdown_sync = MarkdownSync(
+            editor_file=editor_file,
+            github_file=github_file,
+            base_dir=base_dir,
+            language=language
+        )
     
+    # İşlemi başlat
     success = markdown_sync.syncMarkdownFiles()
     if not success:
         exit(1)
+
+if __name__ == "__main__":
+    main() 
